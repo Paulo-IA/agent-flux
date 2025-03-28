@@ -11,6 +11,8 @@ const envSchema = z.object({
 
 const parsedSchema = envSchema.parse(process.env)
 
+console.log(process.env.OPENAI_API_KEY)
+
 export const {
   OPENAI_API_KEY,
   PORT,
@@ -19,3 +21,12 @@ export const {
   COOKIE_SECRET,
   SAMPLE_KEY
 } = parsedSchema
+
+// export const {
+//   OPENAI_API_KEY,
+//   PORT,
+//   JWT_SECRET,
+//   NODE_ENV,
+//   COOKIE_SECRET,
+//   SAMPLE_KEY
+// } = process.env
