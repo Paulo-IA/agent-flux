@@ -5,10 +5,12 @@ import { createRetrievalChain } from "langchain/chains/retrieval";
 import { createHistoryAwareRetriever } from "langchain/chains/history_aware_retriever";
 import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
 import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
-import type { ChatHistory } from "./types/ChatHistory.js";
 import type { LangchainChatHistory } from "./types/LangchainChatHistory.js";
 import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { CSVLoader } from "@langchain/community/document_loaders/fs/csv";
+import type { ChatHistory } from "../../types/ChatHistory.js";
+
+
 
 export class Agent {
   private llmApiKey: string
@@ -82,9 +84,6 @@ export class Agent {
         temperature: 0.7,
         model: "gpt-3.5-turbo"
       })
-
-      // Read prompt
-      // agent prompt = "vla lva"
       
       const prompt = ChatPromptTemplate.fromMessages([
         ["developer", `
