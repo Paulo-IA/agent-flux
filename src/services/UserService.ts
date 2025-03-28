@@ -10,6 +10,7 @@ import { NotFoundError } from "../errors/NotFoundError.js";
 import { UnauthorizedError } from "../errors/UnauthorizedError.js";
 import jwt from "jsonwebtoken"
 import { env } from "../env.js";
+import type { RequestFindManyUsersDTO } from "../utils/dtos/user/requestFindManyUsersDTO.js";
 
 @injectable()
 export class UserService {
@@ -32,6 +33,16 @@ export class UserService {
     user.setPassword(hashedPassword)
 
     await this.userRepository.create(user)
+  }
+
+  async findMany(requestFindManyUsersDTO: RequestFindManyUsersDTO) {
+    let { page, take } = await UserValidator.validateFindManyDTO(requestFindManyUsersDTO)
+
+    const foundUsers = await this.userRepository.findMany({ page, take })
+
+    const users = foundUsers.map(user => UserMapper.entityToResponseDto(user))
+
+    return { users }
   }
 
   async login(loginUserDto: RequestLoginUserDto) {

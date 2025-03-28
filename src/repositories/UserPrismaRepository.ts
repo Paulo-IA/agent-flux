@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import type { IUserRepository } from "../interfaces/IUserRepository.js";
 import { User } from "../domain/User.js";
+import type { RequestFindManyUsersDTO } from "../utils/dtos/user/requestFindManyUsersDTO.js";
 
 export class UserPrismaRepository implements IUserRepository {
   constructor(
@@ -57,5 +58,18 @@ export class UserPrismaRepository implements IUserRepository {
       user.createdAt,
       user.updatedAt
     )
+  }
+
+  async findMany({ page, take }: RequestFindManyUsersDTO): Promise<User[]> {
+    const foundUsers = await this.prisma.user.findMany({
+      skip: (page - 1) * take,
+      take: take,
+      orderBy: {
+        name: 'asc'
+      }
+    })
+    const users = foundUsers.map(user => new User(user.id, user.name, user.email, user.password, user.createdAt, user.updatedAt))
+
+    return users
   }
 }

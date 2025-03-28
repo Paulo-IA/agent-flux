@@ -8,4 +8,5 @@ export function UserRoutes(app: FastifyInstance) {
   const userController: UserController = appContianer.resolve<UserController>("UserController")
   
   app.post('/', { preHandler: isAuth }, userController.create.bind(userController))
+  app.get('/', { preHandler: isAuth }, userController.findMany.bind(userController))
 }

@@ -2,6 +2,7 @@ import { z } from "zod";
 import type { RequestCreateUserDto } from "../utils/dtos/user/RequestCreateUserDto.js";
 import { ValidationError } from "../errors/ValidationError.js";
 import type { RequestLoginUserDto } from "../utils/dtos/auth/RequestLoginUserDto.js";
+import type { RequestFindManyUsersDTO } from "../utils/dtos/user/requestFindManyUsersDTO.js";
 
 export class UserValidator {
   static async validateCreateUserDto(createUserDto: RequestCreateUserDto) {
@@ -31,5 +32,28 @@ export class UserValidator {
     }
 
     return result
+  }
+
+  static async validateFindManyDTO(findManyDto: RequestFindManyUsersDTO) {
+    findManyDto = { page: Number(findManyDto.page), take: Number(findManyDto.take) }
+
+    if (!findManyDto.page) {
+      findManyDto.page = 0
+    }
+    if (!findManyDto.take) {
+      findManyDto.take = 5
+    }
+
+    const schema = z.object({
+      page: z.number().min(0, { message: "Não é possível começar a paginação de um número negativo" }),
+      take: z.number().min(0, { message: "Não é possível começar a paginação de um número negativo" }),
+    })
+
+    const result = await schema.safeParseAsync(findManyDto)
+    if (!result.success) {
+      throw new ValidationError(result.error.issues[0].message)
+    }
+    
+    return result.data
   }
 }

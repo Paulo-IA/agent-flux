@@ -34,4 +34,8 @@ export class User {
   setPassword(password: string): void {
     this.password = password
   }
+
+  getCreatedAt(): Date {
+    return this.createdAt
+  }
 }
