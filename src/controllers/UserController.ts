@@ -4,7 +4,6 @@ import { RequestCreateUserDto } from "../utils/dtos/user/RequestCreateUserDto.js
 import { inject, injectable } from "tsyringe";
 import type { RequestLoginUserDto } from "../utils/dtos/auth/RequestLoginUserDto.js";
 import { getUserFromRequest } from "../utils/getUserFromRequest.js";
-import { NODE_ENV } from "../utils/env.js";
 
 @injectable()
 export class UserController { 

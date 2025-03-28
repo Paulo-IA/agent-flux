@@ -1,5 +1,4 @@
 import type { FastifyInstance } from "fastify";
-import { isAuth } from "../../middlewares/IsAuth.js";
 import { appContianer } from "../../ioc/Container.js";
 import type { AgentController } from "../../controllers/AgentController.js";
 import { ApiKeyAuth } from "../../middlewares/ApiKeyAuth.js";

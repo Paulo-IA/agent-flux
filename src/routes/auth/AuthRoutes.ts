@@ -1,4 +1,4 @@
-import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import type { FastifyInstance } from "fastify";
 import type { UserController } from "../../controllers/UserController.js";
 import { appContianer } from "../../ioc/Container.js";
 

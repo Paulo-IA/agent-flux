@@ -1,5 +1,4 @@
 import { User } from "../../domain/User.js";
-import type { RequestLoginUserDto } from "../dtos/auth/RequestLoginUserDto.js";
 import type { RequestCreateUserDto } from "../dtos/user/RequestCreateUserDto.js";
 
 export class UserMapper {

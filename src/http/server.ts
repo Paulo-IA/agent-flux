@@ -1,24 +1,24 @@
 import "reflect-metadata"
 import Fastify from 'fastify'
-import { COOKIE_SECRET, PORT } from '../utils/env.js'
 import { Routes } from '../routes/Routes.js'
 import { ErrorHandler } from "../middlewares/ErrorHandler.js"
 import fastifyCookie from "@fastify/cookie"
+import { env } from "../env.js"
 
 const app = Fastify()
 
 ErrorHandler(app)
 
 app.register(fastifyCookie, {
-  secret: COOKIE_SECRET,
+  secret: env.COOKIE_SECRET,
 });
 
 app.register(Routes)
 
-app.listen({ port: Number(PORT), host: '0.0.0.0' }, function (err, address) {
+app.listen({ port: Number(env.PORT), host: '0.0.0.0' }, function (err, address) {
   if (err) {
     app.log.error(err)
     process.exit(1)
   }
-  console.log(`Server Running on port ${PORT}! 🚀`)
+  console.log(`Server Running on port ${env.PORT}! 🚀`)
 })

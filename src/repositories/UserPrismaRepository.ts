@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import type { IUserRepository } from "../interfaces/IUserRepository.js";
 import { User } from "../domain/User.js";
-import { inject, injectable } from "tsyringe";
 
 export class UserPrismaRepository implements IUserRepository {
   constructor(

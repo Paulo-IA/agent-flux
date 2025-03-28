@@ -9,7 +9,7 @@ import type { RequestLoginUserDto } from "../utils/dtos/auth/RequestLoginUserDto
 import { NotFoundError } from "../errors/NotFoundError.js";
 import { UnauthorizedError } from "../errors/UnauthorizedError.js";
 import jwt from "jsonwebtoken"
-import { JWT_SECRET } from "../utils/env.js";
+import { env } from "../env.js";
 
 @injectable()
 export class UserService {
@@ -47,7 +47,7 @@ export class UserService {
       throw new UnauthorizedError("Credenciais Incorretas!")
     }
 
-    const token = jwt.sign({ id: user.getId(), email: user.getEmail() }, JWT_SECRET, { expiresIn: "1h" })
+    const token = jwt.sign({ id: user.getId(), email: user.getEmail() }, env.JWT_SECRET, { expiresIn: "1h" })
 
     return token
   }

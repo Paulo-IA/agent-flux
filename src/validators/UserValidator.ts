@@ -1,6 +1,5 @@
-import { z, ZodError } from "zod";
+import { z } from "zod";
 import type { RequestCreateUserDto } from "../utils/dtos/user/RequestCreateUserDto.js";
-import { InternalServerError } from "../errors/InternalServerError.js";
 import { ValidationError } from "../errors/ValidationError.js";
 import type { RequestLoginUserDto } from "../utils/dtos/auth/RequestLoginUserDto.js";
 

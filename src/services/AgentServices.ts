@@ -1,8 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import type { RequestAgentAskDTO } from "../utils/dtos/agent/RequestAgentAskDTO.js";
 import type { ResponseAgentAskDTO } from "../utils/dtos/agent/ResponseAgentAskDTO.js";
-import { SAMPLE_KEY } from "../utils/env.js";
-import { UnauthorizedError } from "../errors/UnauthorizedError.js";
 import { ValidationError } from "../errors/ValidationError.js";
 import type { IAgent } from "../interfaces/IAgent.js";
 

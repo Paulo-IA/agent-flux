@@ -17,20 +17,21 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.777.0",
     "@fastify/cookie": "^11.0.2",
     "@langchain/community": "^0.3.37",
     "@langchain/core": "^0.3.43",
     "@langchain/openai": "^0.4.9",
     "@prisma/client": "^6.5.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.9",
     "bcrypt": "^5.1.1",
     "d3-dsv": "^2.0.0",
     "fastify": "^5.2.2",
     "langchain": "^0.3.19",
     "reflect-metadata": "^0.2.2",
     "tsyringe": "^4.8.0",
-    "zod": "^3.24.2",
-    "@types/bcrypt": "^5.0.2",
-    "@types/jsonwebtoken": "^9.0.9"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",

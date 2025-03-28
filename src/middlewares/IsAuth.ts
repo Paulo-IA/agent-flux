@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { UnauthorizedError } from "../errors/UnauthorizedError.js";
 import jwt from "jsonwebtoken"
-import { JWT_SECRET, NODE_ENV } from "../utils/env.js";
+import { env } from "../env.js";
 
 export async function isAuth(req: FastifyRequest, reply: FastifyReply) {
   const ONE_HOUR = 60 * 60
@@ -15,14 +15,14 @@ export async function isAuth(req: FastifyRequest, reply: FastifyReply) {
 
   let decodedToken: { id: string, email: string }
   try {
-    decodedToken = jwt.verify(token, JWT_SECRET) as { id: string, email: string }
+    decodedToken = jwt.verify(token, env.JWT_SECRET) as { id: string, email: string }
   } catch (err) {
     throw new UnauthorizedError("Token Inválido!")
   }
   
   reply.setCookie("user", JSON.stringify(decodedToken), {
     httpOnly: true,
-    secure: NODE_ENV === "production",
+    secure: env.NODE_ENV === "production",
     sameSite: "strict",
     path: "/",
     maxAge: ONE_HOUR

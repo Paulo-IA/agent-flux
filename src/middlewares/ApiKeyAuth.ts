@@ -1,9 +1,9 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { UnauthorizedError } from "../errors/UnauthorizedError.js";
-import { SAMPLE_KEY } from "../utils/env.js";
+import { env } from "../env.js";
 
 function validateApiKey(reqKey: string) {
-  if (reqKey !== SAMPLE_KEY) {
+  if (reqKey !== env.SAMPLE_KEY) {
     return false
   }
 
