@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+
+  Agent  Agent[]
+  ApiKey ApiKey[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("events")
+}
+
+model Agent {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  slug        String
+
+  prompt      String   @db.Text
+  model       String?
+  temperature Decimal?
+  maxTokens   Int?
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  ApiKey ApiKey[]
+  Memory Memory?
+  LLMKey LLMKey?
+
+  @@map("agents")
+}
+
+model ApiKey {
+  id    String @id @default(uuid())
+  title String
+
+  key String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  agent   Agent  @relation(fields: [agentId], references: [id])
+  agentId String @map("agent_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("api_keys")
+}
+
+model Memory {
+  id         String @id @default(uuid())
+  title      String
+  memoryUrl  String
+  memoryType String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  agent   Agent  @relation(fields: [agentId], references: [id])
+  agentId String @unique @map("agent_id")
+
+  @@map("memories")
+}
+
+model LLMKey {
+  id    String @id @default(uuid())
+  title String
+  key   String
+
+  agent   Agent  @relation(fields: [agentId], references: [id])
+  agentId String @unique @map("agent_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("llm_keys")
+}
