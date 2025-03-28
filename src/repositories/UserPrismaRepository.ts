@@ -68,6 +68,7 @@ export class UserPrismaRepository implements IUserRepository {
         name: 'asc'
       }
     })
+    
     const users = foundUsers.map(user => new User(user.id, user.name, user.email, user.password, user.createdAt, user.updatedAt))
 
     return users

@@ -38,8 +38,9 @@ export class UserValidator {
     findManyDto = { page: Number(findManyDto.page), take: Number(findManyDto.take) }
 
     if (!findManyDto.page) {
-      findManyDto.page = 0
+      findManyDto.page = 1
     }
+
     if (!findManyDto.take) {
       findManyDto.take = 5
     }
