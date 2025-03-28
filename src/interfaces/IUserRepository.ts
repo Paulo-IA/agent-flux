@@ -8,5 +8,5 @@ export interface IUserRepository {
 
   findByEmail(email: string): Promise<User | null>
 
-  findMany({ skip, take }: RequestFindManyUsersDTO): Promise<User[]>
+  findMany({ page, take }: RequestFindManyUsersDTO): Promise<User[]>
 }
