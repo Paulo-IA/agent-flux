@@ -5,7 +5,6 @@ import { inject, injectable } from "tsyringe";
 import type { RequestLoginUserDto } from "../utils/dtos/auth/RequestLoginUserDto.js";
 import { getUserFromRequest } from "../utils/getUserFromRequest.js";
 import type { RequestFindManyUsersDTO } from "../utils/dtos/user/requestFindManyUsersDTO.js";
-
 @injectable()
 export class UserController { 
   constructor (
@@ -24,11 +23,24 @@ export class UserController {
   }
 
   async findMany(req: FastifyRequest, reply: FastifyReply) {
-    const requestFindManyUsersDTO = req.query as RequestFindManyUsersDTO
+    const findManyUsersDTO = req.query as RequestFindManyUsersDTO
 
-    const users = await this.userService.findMany(requestFindManyUsersDTO)
+    const users = await this.userService.findMany(findManyUsersDTO)
+
+    if (users.users.length === 0) {
+      return reply.code(204).send()
+    }
 
     return reply.send(users)
+  }
+
+  async findUnique(req: FastifyRequest, reply: FastifyReply) {
+    // Implement slug
+    // const findUniqueDto = req.params
+
+    // const user = await this.userService.findUnique()
+
+    // return user
   }
 
   async login(req: FastifyRequest, reply: FastifyReply) {

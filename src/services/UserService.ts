@@ -45,6 +45,15 @@ export class UserService {
     return { users }
   }
 
+  async findUnique(id: string) {
+    const user = await this.userRepository.findById(id)
+    if (user === null) {
+      throw new NotFoundError("Usuário não encontrado")
+    }
+
+    return UserMapper.entityToResponseDto(user)
+  }
+
   async login(loginUserDto: RequestLoginUserDto) {
     await UserValidator.validateLoginUserDto(loginUserDto)
     
