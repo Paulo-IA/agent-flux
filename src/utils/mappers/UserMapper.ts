@@ -7,6 +7,7 @@ export class UserMapper {
     return new User(
       "",
       createUserDto.name,
+      createUserDto.slug,
       createUserDto.email,
       createUserDto.password,
       new Date(0),
@@ -18,6 +19,7 @@ export class UserMapper {
     return {
       id: user.getId(),
       name: user.getName(),
+      slug: user.getSlug(),
       email: user.getEmail(),
       createdAt: user.getCreatedAt()
     } as ResponseFindManyUsersDTO

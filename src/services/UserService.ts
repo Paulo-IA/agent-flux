@@ -11,24 +11,30 @@ import { UnauthorizedError } from "../errors/UnauthorizedError.js";
 import jwt from "jsonwebtoken"
 import { env } from "../env.js";
 import type { RequestFindManyUsersDTO } from "../utils/dtos/user/requestFindManyUsersDTO.js";
+import type { RequestFindUniqueDTO } from "../utils/dtos/user/RequestFindUniqueDTO.js";
 
 @injectable()
 export class UserService {
   private SALT_ROUNDS = 10
 
-  constructor (
+  constructor(
     @inject("UserPrismaRepository") readonly userRepository: IUserRepository
-  ) {}
-  
+  ) { }
+
   async create(createUserDto: RequestCreateUserDto) {
     await UserValidator.validateCreateUserDto(createUserDto)
     const user = UserMapper.requestDtoToEntity(createUserDto)
 
-    const userFound = await this.userRepository.findByEmail(user.getEmail())
+    let userFound = await this.userRepository.findByEmail(user.getEmail())
     if (userFound !== null) {
       throw new ConflictError("E-mail já cadastrado!")
     }
-    
+
+    userFound = await this.userRepository.findBySlug(user.getSlug())
+    if (userFound !== null) {
+      throw new ConflictError("Esse slug já está sendo usado!")
+    }
+
     const hashedPassword = await bcrypt.hash(user.getPassword(), this.SALT_ROUNDS)
     user.setPassword(hashedPassword)
 
@@ -45,8 +51,19 @@ export class UserService {
     return { users }
   }
 
-  async findUnique(id: string) {
+  async findById(id: string) {
+    // Make validation
     const user = await this.userRepository.findById(id)
+    if (user === null) {
+      throw new NotFoundError("Usuário não encontrado")
+    }
+
+    return UserMapper.entityToResponseDto(user)
+  }
+
+  async findUnique(findUniqueDTO: RequestFindUniqueDTO) {
+    // Make validation
+    const user = await this.userRepository.findUnique(findUniqueDTO.uniqueId)
     if (user === null) {
       throw new NotFoundError("Usuário não encontrado")
     }
@@ -56,7 +73,7 @@ export class UserService {
 
   async login(loginUserDto: RequestLoginUserDto) {
     await UserValidator.validateLoginUserDto(loginUserDto)
-    
+
     const user = await this.userRepository.findByEmail(loginUserDto.email)
     if (user === null) {
       throw new NotFoundError("Usuário não Encontrado!")

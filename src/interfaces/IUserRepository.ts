@@ -8,5 +8,11 @@ export interface IUserRepository {
 
   findByEmail(email: string): Promise<User | null>
 
+  findByEmailOrSlug({ email, slug }: { email?: string, slug?: string}): Promise<User | null>
+
+  findBySlug(slug: string): Promise<User | null>
+
+  findUnique(uniqueId: string): Promise<User | null>
+
   findMany({ page, take }: RequestFindManyUsersDTO): Promise<User[]>
 }

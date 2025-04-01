@@ -1,14 +1,16 @@
 export class User {
   private id: string;
   private name: string;
+  private slug: string;
   private email: string;
   private password: string;
   private createdAt: Date;
   private updatedAt: Date;
 
-  constructor(id: string, name: string, email: string, password: string, createdAt: Date, updatedAt: Date) {
+  constructor(id: string, name: string, slug: string, email: string, password: string, createdAt: Date, updatedAt: Date) {
     this.id = id
     this.name = name
+    this.slug = slug
     this.email = email
     this.password = password
     this.createdAt = createdAt
@@ -21,6 +23,10 @@ export class User {
 
   getName(): string {
     return this.name
+  }
+
+  getSlug(): string {
+    return this.slug
   }
 
   getEmail(): string {

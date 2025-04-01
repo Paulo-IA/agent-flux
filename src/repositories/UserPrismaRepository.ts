@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import type { IUserRepository } from "../interfaces/IUserRepository.js";
 import { User } from "../domain/User.js";
 import type { RequestFindManyUsersDTO } from "../utils/dtos/user/requestFindManyUsersDTO.js";
+import { NotFoundError } from "../errors/NotFoundError.js";
 
 export class UserPrismaRepository implements IUserRepository {
   constructor(
@@ -12,6 +13,7 @@ export class UserPrismaRepository implements IUserRepository {
     await this.prisma.user.create({
       data: {
         name: user.getName(),
+        slug: user.getSlug(),
         email: user.getEmail(),
         password: user.getPassword()
       }
@@ -32,6 +34,7 @@ export class UserPrismaRepository implements IUserRepository {
     return new User(
       user.id,
       user.name,
+      user.slug,
       user.email,
       user.password,
       user.createdAt,
@@ -53,6 +56,77 @@ export class UserPrismaRepository implements IUserRepository {
     return new User(
       user.id,
       user.name,
+      user.slug,
+      user.email,
+      user.password,
+      user.createdAt,
+      user.updatedAt
+    )
+  }
+
+  async findByEmailOrSlug({ email, slug }: { email?: string; slug?: string; }): Promise<User | null> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        OR: [
+          { email },
+          { slug }
+        ]
+      }
+    })
+
+    if (user === null) {
+      return user
+    }
+
+    return new User(
+      user.id,
+      user.name,
+      user.slug,
+      user.email,
+      user.password,
+      user.createdAt,
+      user.updatedAt
+    )
+  }
+
+  async findBySlug(slug: string): Promise<User | null> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        slug
+      }
+    })
+
+    if(user === null) {
+      return null
+    }
+
+    return new User(
+      user.id,
+      user.name,
+      user.slug,
+      user.email,
+      user.password,
+      user.createdAt,
+      user.updatedAt
+    )
+  }
+
+  async findUnique(uniqueId: string): Promise<User | null> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        OR: [
+          { id: uniqueId },
+          { slug: uniqueId }
+        ]
+      }
+    })
+
+    if (user === null) return null
+
+    return new User(
+      user.id,
+      user.name,
+      user.slug,
       user.email,
       user.password,
       user.createdAt,
@@ -69,7 +143,7 @@ export class UserPrismaRepository implements IUserRepository {
       }
     })
     
-    const users = foundUsers.map(user => new User(user.id, user.name, user.email, user.password, user.createdAt, user.updatedAt))
+    const users = foundUsers.map(user => new User(user.id, user.name, user.slug, user.email, user.password, user.createdAt, user.updatedAt))
 
     return users
   }

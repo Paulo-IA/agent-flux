@@ -9,4 +9,5 @@ export function UserRoutes(app: FastifyInstance) {
   
   app.post('/', { preHandler: isAuth }, userController.create.bind(userController))
   app.get('/', { preHandler: isAuth }, userController.findMany.bind(userController))
+  app.get('/:uniqueId', { preHandler: isAuth }, userController.findUnique.bind(userController))
 }

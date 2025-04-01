@@ -6,8 +6,10 @@ import type { RequestFindManyUsersDTO } from "../utils/dtos/user/requestFindMany
 
 export class UserValidator {
   static async validateCreateUserDto(createUserDto: RequestCreateUserDto) {
+    console.log(createUserDto.slug)
     const schema = z.object({
       name: z.string().nonempty({ message: "O nome é obrigatório." }),
+      slug: z.string().nonempty({ message: "O slug é obrigatório." }),
       email: z.string().nonempty({ message: "O e-mail é obrigatório." }).email({ message: "E-mail incorreto"}),
       password: z.string().nonempty({ message: "A senha é obrigatória." })
     })
