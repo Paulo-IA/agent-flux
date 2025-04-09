@@ -3,6 +3,10 @@ import { UnauthorizedError } from "../errors/UnauthorizedError.js";
 import { env } from "../env.js";
 
 function validateApiKey(reqKey: string) {
+  // Bater no banco
+  // Procurar a chave
+  // Validar
+  // Retornar id do agent
   if (reqKey !== env.SAMPLE_KEY) {
     return false
   }

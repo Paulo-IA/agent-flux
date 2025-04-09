@@ -10,8 +10,6 @@ import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { CSVLoader } from "@langchain/community/document_loaders/fs/csv";
 import type { ChatHistory } from "../../types/ChatHistory.js";
 
-
-
 export class Agent {
   private llmApiKey: string
   private prompt: string

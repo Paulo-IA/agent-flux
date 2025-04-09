@@ -5,14 +5,15 @@ import { UserController } from "../controllers/UserController.js";
 import { AgentController } from "../controllers/AgentController.js";
 import { AgentService } from "../services/AgentServices.js";
 import { AgentImpl } from "../domain/AgentImpl.js";
+import { AgentPrismaRepository } from "../repositories/AgentPrismaRepository.js";
 
-container.register("UserPrismaRepository", { useClass: UserPrismaRepository })
-
-container.register("UserService", { useClass: UserService })
 container.register("UserController", { useClass: UserController })
+container.register("UserService", { useClass: UserService })
+container.register("UserPrismaRepository", { useClass: UserPrismaRepository })
 
 container.register("AgentController", { useClass: AgentController })
 container.register("AgentService", { useClass: AgentService })
+container.register("AgentPrismaRepository", { useClass: AgentPrismaRepository })
 
 container.register("AgentImpl", { useClass: AgentImpl })
 
