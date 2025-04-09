@@ -17,7 +17,7 @@ export class AgentService {
       throw new ValidationError("Dados inválidos!")
     }
 
-    // usar Agent injetado
+    // Procurar agente da Key
     const agentResponse = await this.agent.ask({ question, chatHistory })
 
     chatHistory.push({

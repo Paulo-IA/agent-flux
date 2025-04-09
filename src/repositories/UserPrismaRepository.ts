@@ -2,7 +2,6 @@ import { PrismaClient } from "@prisma/client";
 import type { IUserRepository } from "../interfaces/IUserRepository.js";
 import { User } from "../domain/User.js";
 import type { RequestFindManyUsersDTO } from "../utils/dtos/user/requestFindManyUsersDTO.js";
-import { NotFoundError } from "../errors/NotFoundError.js";
 
 export class UserPrismaRepository implements IUserRepository {
   constructor(
