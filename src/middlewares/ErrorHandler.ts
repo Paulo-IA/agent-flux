@@ -3,7 +3,7 @@ import { AppError } from "../errors/AppError.js";
 
 export function ErrorHandler(app: FastifyInstance) {
   app.setErrorHandler((err: FastifyError | AppError, req: FastifyRequest, reply: FastifyReply) => {
-    console.log("erro capturado: " + err)
+    console.log("erro capturado: " + err.stack)
 
     if (err instanceof AppError) {
       return reply.status(err.status).send({

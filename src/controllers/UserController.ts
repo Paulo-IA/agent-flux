@@ -6,6 +6,7 @@ import type { RequestLoginUserDto } from "../utils/dtos/auth/RequestLoginUserDto
 import { getUserFromRequest } from "../utils/getUserFromRequest.js";
 import type { RequestFindManyUsersDTO } from "../utils/dtos/user/requestFindManyUsersDTO.js";
 import type { RequestFindUniqueDTO } from "../utils/dtos/user/RequestFindUniqueDTO.js";
+import type { PaginationDTO } from "../utils/dtos/PaginationDTO.js";
 @injectable()
 export class UserController { 
   constructor (
@@ -13,9 +14,6 @@ export class UserController {
   ) { }
 
   async create(req: FastifyRequest, reply: FastifyReply) {
-    // const user = getUserFromRequest(req)
-    // console.log(user)
-
     const createUserDto: RequestCreateUserDto = req.body as RequestCreateUserDto
 
     await this.userService.create(createUserDto)
@@ -24,9 +22,9 @@ export class UserController {
   }
 
   async findMany(req: FastifyRequest, reply: FastifyReply) {
-    const findManyUsersDTO = req.query as RequestFindManyUsersDTO
+    const dto = req.query as PaginationDTO
 
-    const users = await this.userService.findMany(findManyUsersDTO)
+    const users = await this.userService.findMany(dto)
 
     if (users.users.length === 0) {
       return reply.code(204).send()

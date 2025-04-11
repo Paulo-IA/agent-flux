@@ -6,7 +6,6 @@ import type { RequestFindManyUsersDTO } from "../utils/dtos/user/requestFindMany
 
 export class UserValidator {
   static async validateCreateUserDto(createUserDto: RequestCreateUserDto) {
-    console.log(createUserDto.slug)
     const schema = z.object({
       name: z.string().nonempty({ message: "O nome é obrigatório." }),
       slug: z.string().nonempty({ message: "O slug é obrigatório." }),
@@ -33,7 +32,7 @@ export class UserValidator {
       throw new ValidationError(result.error.issues[0].message)
     }
 
-    return result
+    return result.data
   }
 
   static async validateFindManyDTO(findManyDto: RequestFindManyUsersDTO) {

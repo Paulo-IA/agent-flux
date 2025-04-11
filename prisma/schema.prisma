@@ -14,8 +14,7 @@ model User {
   password String
   slug     String @unique
 
-  Agent  Agent[]
-  ApiKey ApiKey[]
+  Agent Agent[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -29,10 +28,10 @@ model Agent {
   description String?
   slug        String
 
-  prompt      String   @db.Text
-  model       String?
-  temperature Decimal?
-  maxTokens   Int?
+  prompt      String  @db.Text
+  model       String  @default("gpt-3.5-turbo")
+  temperature Decimal @default(0.7)
+  maxTokens   Int     @default(150)
 
   user   User   @relation(fields: [userId], references: [id])
   userId String @map("user_id")
@@ -40,6 +39,9 @@ model Agent {
   ApiKey ApiKey[]
   Memory Memory?
   LLMKey LLMKey?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("agents")
 }
@@ -49,9 +51,6 @@ model ApiKey {
   title String
 
   key String @unique
-
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @map("user_id")
 
   agent   Agent  @relation(fields: [agentId], references: [id])
   agentId String @map("agent_id")

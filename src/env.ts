@@ -9,7 +9,9 @@ const envSchema = z.object({
   SAMPLE_KEY: z.string().nonempty(),
   CLOUDFLARE_ENDPOINT: z.string().url(),
   CLOUDFLARE_ACCESS_KEY_ID: z.string().nonempty(),
-  CLOUDFLARE_SECRET_ACCESS_KEY: z.string().nonempty()
+  CLOUDFLARE_SECRET_ACCESS_KEY: z.string().nonempty(),
+  CRYPTO_SECRET_KEY: z.string().nonempty(),
+  CRYPTO_IV: z.string().nonempty()
 })
 
 export const env = envSchema.parse(process.env)
