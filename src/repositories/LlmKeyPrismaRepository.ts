@@ -23,11 +23,7 @@ export class LlmKeyPrismaRepository implements ILlmKeyRepository {
   }
 
   async findUnique({ by }: FindUniqueQuery): Promise<LlmKey | null> {
-    const where = by.id ? { id: by.id } : (
-      by.agentId ? { agentId: by.agentId } : (
-        { title: by.title }
-      )
-    )
+    const where = by.id ? { id: by.id } : { agentId: by.agentId }
     
     const llmKey = await this.prisma.lLMKey.findFirst({
       where
