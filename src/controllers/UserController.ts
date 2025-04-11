@@ -14,9 +14,6 @@ export class UserController {
   ) { }
 
   async create(req: FastifyRequest, reply: FastifyReply) {
-    // const user = getUserFromRequest(req)
-    // console.log(user)
-
     const createUserDto: RequestCreateUserDto = req.body as RequestCreateUserDto
 
     await this.userService.create(createUserDto)

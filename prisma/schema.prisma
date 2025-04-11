@@ -14,8 +14,7 @@ model User {
   password String
   slug     String @unique
 
-  Agent  Agent[]
-  ApiKey ApiKey[]
+  Agent Agent[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -52,9 +51,6 @@ model ApiKey {
   title String
 
   key String @unique
-
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @map("user_id")
 
   agent   Agent  @relation(fields: [agentId], references: [id])
   agentId String @map("agent_id")

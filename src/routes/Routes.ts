@@ -3,6 +3,7 @@ import { UserRoutes } from "./user/UserRoutes.js";
 import { AuthRoutes } from "./auth/AuthRoutes.js";
 import { AgentRoutes } from "./agents/AgentRoutes.js";
 import { LlmKeyRoutes } from "./llmKey/LlmKeyRoutes.js";
+import { ApiKeyRoutes } from "./apiKey/ApiKeyRoutes.js";
 
 export function Routes(app: FastifyInstance) {
 
@@ -10,4 +11,5 @@ export function Routes(app: FastifyInstance) {
   app.register(AgentRoutes, { prefix: 'agents' })
   app.register(AuthRoutes, { prefix: 'auth' })
   app.register(LlmKeyRoutes, { prefix: 'llm-keys' })
+  app.register(ApiKeyRoutes, { prefix: 'api-keys' })
 }
