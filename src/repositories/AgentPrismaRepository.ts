@@ -2,6 +2,7 @@ import { inject, injectable } from "tsyringe";
 import type { IAgentRepository } from "../interfaces/IAgentRepository.js";
 import { PrismaClient } from "@prisma/client";
 import { Agent } from "../domain/Agent.js";
+import type { FindUniqueQuery } from "../types/agent/FindUniqueQuery.js";
 
 @injectable()
 export class AgentPrismaRepository implements IAgentRepository {
@@ -52,14 +53,20 @@ export class AgentPrismaRepository implements IAgentRepository {
     })
   }
 
-  async findUnique(uniqueId: string): Promise<Agent | null> {
+  async findUnique({ by }: FindUniqueQuery): Promise<Agent | null> {
+    const where = by.id ? { id: by.id } : (
+      by.slug ? { slug: by.slug } : (
+        {
+          OR: [
+            { id: by.uniqueId },
+            { slug: by.uniqueId }
+          ]
+        }
+      )
+    )
+    
     const agent = await this.prisma.agent.findFirst({
-      where: {
-        OR: [
-          { id: uniqueId },
-          { slug: uniqueId }
-        ]
-      }
+      where,
     })
 
     if(agent===null) return null

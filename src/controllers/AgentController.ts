@@ -9,6 +9,7 @@ import type { ResponseFindManyAgentsDTO } from "../utils/dtos/agent/ResponseFind
 import type { RequestFindManyAgentsDTO } from "../utils/dtos/agent/RequestFindManyAgentsDTO.js";
 import type { RequestFindUniqueAgentDTO } from "../utils/dtos/agent/RequestFindUniqueAgentDTO.js";
 import type { ResponseFindUniqueAgentDTO } from "../utils/dtos/agent/ResponseFindUniqueAgentDTO.js";
+import type { PaginationDTO } from "../utils/dtos/PaginationDTO.js";
 
 @injectable()
 export class AgentController {
@@ -28,9 +29,9 @@ export class AgentController {
   }
 
   async findMany(req: FastifyRequest, reply: FastifyReply): Promise<ResponseFindManyAgentsDTO> {
-    const requestFindManyAgentsDTO = req.query as RequestFindManyAgentsDTO
+    const dto = req.query as PaginationDTO
 
-    const agents = await this.agentService.findMany(requestFindManyAgentsDTO)
+    const agents = await this.agentService.findMany(dto)
     
     return reply.send({ agents })
   }

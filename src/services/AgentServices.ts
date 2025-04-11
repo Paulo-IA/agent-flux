@@ -12,6 +12,8 @@ import type { ResponseAgent } from "../types/agent/ResponseAgent.js";
 import type { ResponseDetailedAgent } from "../types/agent/ResponseDetailedAgent.js";
 import type { RequestFindUniqueAgentDTO } from "../utils/dtos/agent/RequestFindUniqueAgentDTO.js";
 import { NotFoundError } from "../errors/NotFoundError.js";
+import type { PaginationDTO } from "../utils/dtos/PaginationDTO.js";
+import { PaginationValidator } from "../validators/PaginationValidator.js";
 
 @injectable()
 export class AgentService {
@@ -28,8 +30,8 @@ export class AgentService {
     await this.agentRepository.create(agent)
   }
 
-  async findMany(requestFindManyAgentsDTO: RequestFindManyAgentsDTO): Promise<ResponseAgent[]> {
-    const { page, take } = await AgentValidator.validateRequestFindManyAgentDTO(requestFindManyAgentsDTO);
+  async findMany(dto: PaginationDTO): Promise<ResponseAgent[]> {
+    const { page, take } = await PaginationValidator.validatePaginationDTO(dto);
 
     const agents = await this.agentRepository.findMany(page, take)
     
@@ -47,7 +49,7 @@ export class AgentService {
   async findUnique(requestFindUniqueAgentsDTO: RequestFindUniqueAgentDTO): Promise<ResponseDetailedAgent> {
     const { uniqueId } =  await AgentValidator.validateRequestFindUniqueDTO(requestFindUniqueAgentsDTO)
 
-    const agent = await this.agentRepository.findUnique(uniqueId)
+    const agent = await this.agentRepository.findUnique({ by: { id: uniqueId } })
     if (agent === null) {
       throw new NotFoundError("Agente não encontrado!")
     }

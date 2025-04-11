@@ -10,8 +10,9 @@ import { NotFoundError } from "../errors/NotFoundError.js";
 import { UnauthorizedError } from "../errors/UnauthorizedError.js";
 import jwt from "jsonwebtoken"
 import { env } from "../env.js";
-import type { RequestFindManyUsersDTO } from "../utils/dtos/user/requestFindManyUsersDTO.js";
 import type { RequestFindUniqueDTO } from "../utils/dtos/user/RequestFindUniqueDTO.js";
+import type { PaginationDTO } from "../utils/dtos/PaginationDTO.js";
+import { PaginationValidator } from "../validators/PaginationValidator.js";
 
 @injectable()
 export class UserService {
@@ -41,8 +42,8 @@ export class UserService {
     await this.userRepository.create(user)
   }
 
-  async findMany(requestFindManyUsersDTO: RequestFindManyUsersDTO) {
-    let { page, take } = await UserValidator.validateFindManyDTO(requestFindManyUsersDTO)
+  async findMany(dto: PaginationDTO) {
+    let { page, take } = await PaginationValidator.validatePaginationDTO(dto)
 
     const foundUsers = await this.userRepository.findMany({ page, take })
 
