@@ -1,10 +1,8 @@
-import { inject, injectable } from "tsyringe";
 import type { IAgentRepository } from "../interfaces/IAgentRepository.js";
 import { PrismaClient } from "@prisma/client";
 import { Agent } from "../domain/Agent.js";
 import type { FindUniqueQuery } from "../types/agent/FindUniqueQuery.js";
 
-@injectable()
 export class AgentPrismaRepository implements IAgentRepository {
   constructor(readonly prisma: PrismaClient = new PrismaClient()) {}
 

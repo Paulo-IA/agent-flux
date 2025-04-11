@@ -1,11 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import { injectable } from "tsyringe";
 import type { ILlmKeyRepository } from "../interfaces/ILlmKeyRepository.js";
-import type { CreateLlmKeyData } from "../types/llmKey/CreateLlmKeyData.js";
 import { LlmKey } from "../domain/LlmKey.js";
 import type { FindUniqueQuery } from "../types/llmKey/FindUniqueQuery.js";
 
-@injectable()
 export class LlmKeyPrismaRepository implements ILlmKeyRepository {
   constructor(
     private readonly prisma: PrismaClient = new PrismaClient()
