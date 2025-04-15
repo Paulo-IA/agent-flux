@@ -22,7 +22,7 @@ export class Agent {
   
     this.getChain()
   }
-  
+
   async ask(question: string, requestChatHistory: ChatHistory) {
     const chain = await this.getChain()
 
@@ -68,7 +68,7 @@ export class Agent {
     
     const splitDocs = await splitter.splitDocuments(docs)
     
-    const embeddings = new OpenAIEmbeddings()
+    const embeddings = new OpenAIEmbeddings({ openAIApiKey: this.llmApiKey })
     
     // Trocar
     const vectorStore = await MemoryVectorStore.fromDocuments(splitDocs, embeddings)
@@ -76,7 +76,7 @@ export class Agent {
     return vectorStore
   }
 
-  private async createChain(vectorStore: MemoryVectorStore) {
+  private async createChain(vectorStore: MemoryVectorStore) {    
       const model = new ChatOpenAI({
         openAIApiKey: this.llmApiKey,
         temperature: 0.7,

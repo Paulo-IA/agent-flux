@@ -22,7 +22,7 @@
     "@langchain/community": "^0.3.37",
     "@langchain/core": "^0.3.43",
     "@langchain/openai": "^0.4.9",
-    "@prisma/client": "^6.5.0",
+    "@prisma/client": "^6.6.0",
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.9",
     "bcrypt": "^5.1.1",

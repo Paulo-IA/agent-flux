@@ -4,7 +4,6 @@ import type { RequestCreateLlmKeyDTO } from "../utils/dtos/llmKeys/RequestCreate
 import { LlmKeyValidator } from "../validators/LlmKeyValidator.js";
 import type { IAgentRepository } from "../interfaces/IAgentRepository.js";
 import { NotFoundError } from "../errors/NotFoundError.js";
-import bcrypt from "bcrypt"
 import { LlmKeyMapper } from "../utils/mappers/LlmKeyMapper.js";
 import type { PaginationDTO } from "../utils/dtos/PaginationDTO.js";
 import { PaginationValidator } from "../validators/PaginationValidator.js";
@@ -20,7 +19,6 @@ export class LlmKeyService {
   ) {}
 
   // Services
-  
   // Create Service
   async create(dto: RequestCreateLlmKeyDTO) {
     await LlmKeyValidator.validateRequestCreateLlmKeyDTO(dto)
@@ -41,6 +39,8 @@ export class LlmKeyService {
     // Encripta a chave
     const encryptedKey = this.cryptographyService.encrypt(llmKey.getKey())
     llmKey.setKey(encryptedKey)
+
+    llmKey.setAgentId(agent.getId())
 
     await this.llmKeyRepository.create(llmKey)
   }

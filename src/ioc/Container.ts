@@ -13,6 +13,7 @@ import { CryptoService } from "../services/CryptoService.js";
 import { ApiKeyController } from "../controllers/ApiKeyController.js";
 import { ApiKeyPrismaRepository } from "../repositories/ApiKeyPrismaRepository.js";
 import { ApiKeyService } from "../services/ApiKeyService.js";
+import { ApiKeyValidatorService } from "../services/ApiKeyValidatorService.js";
 
 container.register("CryptoService", { useClass: CryptoService })
 
@@ -32,5 +33,9 @@ container.register("LlmKeyPrismaRepository", { useClass: LlmKeyPrismaRepository 
 container.register("ApiKeyController", { useClass: ApiKeyController })
 container.register("ApiKeyService", { useClass: ApiKeyService })
 container.register("ApiKeyPrismaRepository", { useClass: ApiKeyPrismaRepository })
+
+container.register("ApiKeyValidatorService", { useClass: ApiKeyValidatorService})
+
+
 
 export const appContianer = container

@@ -1,5 +1,6 @@
+import type { Agent } from "../domain/Agent.js";
 import type { QuestionInfos } from "../types/QuestionInfos.js";
 
 export interface IAgent {
-  ask(questionInfos: QuestionInfos): Promise<string>
+  ask(agent: Agent, questionInfos: QuestionInfos): Promise<string>
 }

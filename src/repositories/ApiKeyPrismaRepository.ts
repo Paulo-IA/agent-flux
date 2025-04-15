@@ -1,6 +1,7 @@
 import type { IApiKeyRepository } from "../interfaces/IApiKeyRepository.js";
-import type { ApiKey } from "../domain/ApiKey.js";
+import { ApiKey } from "../domain/ApiKey.js";
 import { PrismaClient } from "@prisma/client";
+import type { FindUniqueApiKeyQuery } from "../types/apiKey/FindUniqueApiKeyQuery.js";
 
 export class ApiKeyPrismaRepository implements IApiKeyRepository {
 
@@ -13,6 +14,25 @@ export class ApiKeyPrismaRepository implements IApiKeyRepository {
         key: apiKey.getKey(),
         agentId: apiKey.getAgentId()
       }
+    })
+  }
+
+  async findMany({ by }: FindUniqueApiKeyQuery): Promise<ApiKey[]> {
+    const where = by.agentId ? { agentId: by.agentId } : {}
+
+    const apiKeys = await this.prisma.apiKey.findMany({
+      where
+    })
+
+    return apiKeys.map(apiKey => {
+      return new ApiKey(
+        apiKey.id,
+        apiKey.title,
+        apiKey.key,
+        apiKey.agentId,
+        apiKey.createdAt,
+        apiKey.updatedAt
+      )
     })
   }
 

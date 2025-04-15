@@ -2,6 +2,24 @@ import type { ApiKey } from "./ApiKey.js"
 import type { LlmKey } from "./LlmKey.js"
 import type { Memory } from "./Memory.js"
 
+interface AgentToObject {
+  id: string
+  name: string
+  slug: string
+  description: string
+  prompt: string
+  model: string
+  temperature: number
+  maxTokens: number
+  apiKeys: ApiKey[] | undefined
+  llmKey: LlmKey | undefined
+  memory: Memory | undefined
+  userId: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+
 export class Agent {
   private id: string
   private name: string
@@ -85,6 +103,10 @@ export class Agent {
 
   getApiKeys(): ApiKey[] | undefined {
     return this.apiKeys
+  }
+
+  setApiKeys(apiKeys: ApiKey[]): void {
+    this.apiKeys = apiKeys
   }
   
   getLlmKey(): LlmKey | undefined {

@@ -25,6 +25,8 @@ export class AgentService {
   async create(requestCreateAgentDTO: RequestCreateAgentDTO): Promise<void> {
     await AgentValidator.validateRequestCreateAgentDTO(requestCreateAgentDTO)
 
+    // Validar existência do slug
+
     const agent = AgentMapper.agentDtoToEntity(requestCreateAgentDTO)
 
     await this.agentRepository.create(agent)
@@ -58,14 +60,18 @@ export class AgentService {
   }
 
   async ask(requestAgentAskDTO: RequestAgentAskDTO): Promise<ResponseAgentAskDTO> {
-    const { question, chatHistory } = requestAgentAskDTO
+    const { question, chatHistory, agentId } = requestAgentAskDTO
     // validar dados
     if (question === "" || question === " ") {
       throw new ValidationError("Dados inválidos!")
     }
 
-    // Procurar agente da Key
-    const agentResponse = await this.agent.ask({ question, chatHistory })
+    const agent = await this.agentRepository.findUnique({ by: { id: agentId } })
+    if (agent === null) {
+      throw new NotFoundError("Agente não encontrado!")
+    }
+
+    const agentResponse = await this.agent.ask(agent, { question, chatHistory })
 
     chatHistory.push({
       role: "user",

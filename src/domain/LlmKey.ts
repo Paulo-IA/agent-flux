@@ -50,6 +50,10 @@ export class LlmKey {
   getAgentId(): string {
     return this.agentId
   }
+
+  setAgentId(agentId: string): void {
+    this.agentId = agentId
+  }
   
   getCreatedAt(): Date {
     return this.createdAt
