@@ -7,6 +7,8 @@ import { z } from "zod";
 import { ValidationError } from "../errors/ValidationError.js";
 import { NotFoundError } from "../errors/NotFoundError.js";
 import type { ICryptography } from "../interfaces/ICryptography.js";
+import path from "node:path";
+import fs from "node:fs/promises"
 
 @injectable()
 export class AgentImpl implements IAgent {
@@ -14,7 +16,8 @@ export class AgentImpl implements IAgent {
     @inject("CryptoService") readonly cryptographyService: ICryptography
   ) {}
 
-  private pathToMemory: string = import.meta.dirname.split('domain')[0] + "public/iris_memory.csv"
+  // private pathToMemory: string = import.meta.dirname.split('domain')[0] + "public/iris_memory.csv"
+  private pathToMemory: string = "https://pub-56edb005846c42279165d18761db2da6.r2.dev/iris_memory.csv"
 
   async ask(agentDomain: AgentDomain, questionInfos: QuestionInfos): Promise<string> {
     const { question, chatHistory } = questionInfos
@@ -32,6 +35,20 @@ export class AgentImpl implements IAgent {
 
     const llmKeyValue = this.cryptographyService.decrypt(llmKey.getKey())
 
+    // get file and path
+    const resp = await fetch(this.pathToMemory);
+    if (!resp.ok) {
+      throw new Error(`Erro HTTP: ${resp.status}`);
+    }
+
+    const __dirname = import.meta.dirname.split('domain')[0]
+    const filename = `${new Date()}-${agentDomain.getId()}-memory.csv`
+    const buffer = await resp.arrayBuffer();
+    const filePath = path.join(__dirname, "downloads", filename);
+    await fs.mkdir(path.dirname(filePath), { recursive: true });
+    await fs.writeFile(filePath, Buffer.from(buffer));
+    // get file and path
+
     const res = await schema.safeParseAsync({
       llmKey: llmKeyValue,
       prompt: agentDomain.getPrompt()
@@ -41,9 +58,12 @@ export class AgentImpl implements IAgent {
     }
     // Validation end
 
-    const agent = new Agent(llmKeyValue, agentDomain.getPrompt(), this.pathToMemory)
+    const agent = new Agent(llmKeyValue, agentDomain.getPrompt(), filePath)
 
     const { response } = await agent.ask(question, chatHistory)
+
+    await fs.unlink(filePath)
+    console.log("Removido")
 
     return response
   }
