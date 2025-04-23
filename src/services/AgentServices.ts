@@ -108,6 +108,8 @@ export class AgentService {
       chatHistory
     }
 
+    console.log(chatHistory)
+
     // retornar resposta
     return response
   }
