@@ -59,24 +59,48 @@ export class Agent {
     return this.name
   }
 
+  setName(name: string): void {
+    this.name = name
+  }
+
   getSlug(): string {
     return this.slug
+  }
+
+  setSlug(slug: string): void {
+    this.slug = slug
   }
   
   getDescription(): string  {
     return this.description
   }
+
+  setDescription(description: string): void {
+    this.description = description
+  }
   
   getPrompt(): string {
     return this.prompt
+  }
+
+  setPrompt(prompt: string): void {
+    this.prompt = prompt
   }
   
   getModel(): string  {
     return this.model
   }
 
+  setModel(model: string): void {
+    this.model = model
+  }
+
   getTemperature(): number  {
     return this.temperature
+  }
+
+  setTemperature(temperature: number): void {
+    this.temperature = temperature
   }
   
   getMaxTokens(): number {

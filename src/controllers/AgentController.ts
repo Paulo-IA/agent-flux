@@ -10,6 +10,8 @@ import type { RequestFindManyAgentsDTO } from "../utils/dtos/agent/RequestFindMa
 import type { RequestFindUniqueAgentDTO } from "../utils/dtos/agent/RequestFindUniqueAgentDTO.js";
 import type { ResponseFindUniqueAgentDTO } from "../utils/dtos/agent/ResponseFindUniqueAgentDTO.js";
 import type { PaginationDTO } from "../utils/dtos/PaginationDTO.js";
+import type { RequestUpdateAgentDTO } from "../utils/dtos/agent/RequestUpdateAgentDTO.js";
+import type { RequestParamsUpdateAgentDTO } from "../utils/dtos/agent/RequestParamsUpdateAgentDTO.js";
 
 @injectable()
 export class AgentController {
@@ -45,12 +47,14 @@ export class AgentController {
   }
 
   async update(req: FastifyRequest, reply: FastifyReply): Promise<void> {
-    // const data = req.body as RequestBodyUpdateAgentDTO
-    // const { id } = req.params as RequestParamsUpdateAgentDTO
+    const dto = req.body as RequestUpdateAgentDTO
+    const { id } = req.params as RequestParamsUpdateAgentDTO
 
-    // const dto = {
-        
-    // }
+    dto["id"] = id
+
+    await this.agentService.update(dto)
+
+    return reply.status(204).send()
   }
 
   async ask(req: FastifyRequest, reply: FastifyReply): Promise<ResponseAgentAskDTO> {

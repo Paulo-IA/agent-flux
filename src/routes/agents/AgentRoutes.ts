@@ -12,4 +12,6 @@ export async function AgentRoutes(app: FastifyInstance) {
 
   app.get("/", { preHandler: isAuth }, agentController.findMany.bind(agentController))
   app.get("/:uniqueId", { preHandler: isAuth }, agentController.findUnique.bind(agentController))
+
+  app.put("/:id", { preHandler: isAuth }, agentController.update.bind(agentController))
 }

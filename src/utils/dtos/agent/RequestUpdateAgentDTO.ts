@@ -1,7 +1,9 @@
 export interface RequestUpdateAgentDTO {
+  id: string
   name: string
   slug: string
-  // Terminar
-
-  id: string
+  description: string
+  prompt: string
+  model: string
+  temperature: string
 }

@@ -128,12 +128,6 @@ export class AgentPrismaRepository implements IAgentRepository {
   }
 
   async update(agent: Agent): Promise<void> {
-    const apiKeys = await this.prisma.apiKey.findMany({
-      where: {
-        agentId: agent.getId()
-      }
-    })
-
     await this.prisma.agent.update({
       where: {
         id: agent.getId()

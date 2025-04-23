@@ -14,6 +14,8 @@ import type { RequestFindUniqueAgentDTO } from "../utils/dtos/agent/RequestFindU
 import { NotFoundError } from "../errors/NotFoundError.js";
 import type { PaginationDTO } from "../utils/dtos/PaginationDTO.js";
 import { PaginationValidator } from "../validators/PaginationValidator.js";
+import type { RequestUpdateAgentDTO } from "../utils/dtos/agent/RequestUpdateAgentDTO.js";
+import { Agent } from "../domain/Agent.js";
 
 @injectable()
 export class AgentService {
@@ -30,6 +32,24 @@ export class AgentService {
     const agent = AgentMapper.agentDtoToEntity(requestCreateAgentDTO)
 
     await this.agentRepository.create(agent)
+  }
+
+  async update(dto: RequestUpdateAgentDTO) {
+    await AgentValidator.validateRequestUpdateDTO(dto)
+    
+    const agent = await this.agentRepository.findUnique({ by: { id: dto.id } })
+    if (agent === null) {
+      throw new NotFoundError("Agent Not Found.")
+    }
+
+    agent.setName(dto.name)
+    agent.setDescription(dto.description)
+    agent.setSlug(dto.slug)
+    agent.setPrompt(dto.prompt)
+    agent.setModel(dto.model)
+    agent.setTemperature(dto.temperature ? Number(dto.temperature) : agent.getTemperature() )
+
+    await this.agentRepository.update(agent)
   }
 
   async findMany(dto: PaginationDTO): Promise<ResponseAgent[]> {

@@ -3,6 +3,7 @@ import type { RequestCreateAgentDTO } from "../utils/dtos/agent/RequestCreateAge
 import { ValidationError } from "../errors/ValidationError.js";
 import type { RequestFindManyAgentsDTO } from "../utils/dtos/agent/RequestFindManyAgentsDTO.js";
 import type { RequestFindUniqueAgentDTO } from "../utils/dtos/agent/RequestFindUniqueAgentDTO.js";
+import type { RequestUpdateAgentDTO } from "../utils/dtos/agent/RequestUpdateAgentDTO.js";
 
 export class AgentValidator {
   static async validateRequestCreateAgentDTO(requestCreateAgentDTO: RequestCreateAgentDTO) {
@@ -62,5 +63,24 @@ export class AgentValidator {
     }
 
     return response.data
+  }
+
+  static async validateRequestUpdateDTO(dto: RequestUpdateAgentDTO) {
+    const schema = z.object({
+      id: z.string().nonempty("Nenhum identificador encontrado!"),
+      name: z.string().optional(),
+      slug: z.string().optional(),
+      description: z.string().optional(),
+      prompt: z.string().optional(),
+      model: z.string().optional(),
+      temperature: z.string().optional(),
+    })
+
+    const res = await schema.safeParseAsync(dto)
+    if (!res.success) {
+      throw new ValidationError(res.error.issues[0].message)
+    }
+
+    return res.data
   }
 }
