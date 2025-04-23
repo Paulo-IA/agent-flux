@@ -19,7 +19,7 @@ export class LlmKeyValidator {
     return response.data
   }
 
-  static async validateGetLlmKeyDTO(dto: RequestGetLlmKeyDTO) {
+  static async validateGetLlmKeyDTO(dto: { agentId: string}) {
     const schema = z.object({
       agentId: z.string().nonempty("A identificação do Agente é obrigatória!")
     })

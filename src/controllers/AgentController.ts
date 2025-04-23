@@ -44,6 +44,15 @@ export class AgentController {
     return reply.send({ agent })
   }
 
+  async update(req: FastifyRequest, reply: FastifyReply): Promise<void> {
+    // const data = req.body as RequestBodyUpdateAgentDTO
+    // const { id } = req.params as RequestParamsUpdateAgentDTO
+
+    // const dto = {
+        
+    // }
+  }
+
   async ask(req: FastifyRequest, reply: FastifyReply): Promise<ResponseAgentAskDTO> {
     const requestAgentAskDto = req.body as RequestAgentAskDTO
     const { agentId } = req.raw as any

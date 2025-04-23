@@ -9,5 +9,5 @@ export function LlmKeyRoutes(app: FastifyInstance) {
   app.post("/", { preHandler: isAuth }, llmKeyController.create.bind(llmKeyController))
 
   app.get("/", { preHandler: isAuth }, llmKeyController.findMany.bind(llmKeyController))
-  app.get("/get/:agentId", { preHandler: isAuth }, llmKeyController.getKey.bind(llmKeyController))
+  // app.get("/get/:id", { preHandler: isAuth }, llmKeyController.findUnique.bind(llmKeyController))
 }

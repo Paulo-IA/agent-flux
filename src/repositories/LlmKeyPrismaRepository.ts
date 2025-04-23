@@ -10,12 +10,12 @@ export class LlmKeyPrismaRepository implements ILlmKeyRepository {
   ) {}
 
   // create()
-  async create(data: LlmKey): Promise<void> {
+  async create(llmKey: LlmKey): Promise<void> {
     await this.prisma.lLMKey.create({
       data: {
-        title: data.getTitle(),
-        key: data.getKey(),
-        agentId: data.getAgentId()
+        title: llmKey.getTitle(),
+        key: llmKey.getKey(),
+        agentId: llmKey.getAgentId()
       }
     })
   }

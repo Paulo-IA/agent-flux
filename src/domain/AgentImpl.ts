@@ -5,15 +5,16 @@ import { Agent } from "../utils/agent/Agent.js";
 import { Agent as AgentDomain } from "../domain/Agent.js"
 import { z } from "zod";
 import { ValidationError } from "../errors/ValidationError.js";
-import { NotFoundError } from "../errors/NotFoundError.js";
 import type { ICryptography } from "../interfaces/ICryptography.js";
 import path from "node:path";
 import fs from "node:fs/promises"
+import type { LlmKeyService } from "../services/LlmKeyService.js";
 
 @injectable()
 export class AgentImpl implements IAgent {
   constructor(
-    @inject("CryptoService") readonly cryptographyService: ICryptography
+    @inject("CryptoService") readonly cryptographyService: ICryptography,
+    @inject("LlmKeyService") readonly llmKeyService: LlmKeyService
   ) {}
 
   // private pathToMemory: string = import.meta.dirname.split('domain')[0] + "public/iris_memory.csv"
@@ -28,12 +29,7 @@ export class AgentImpl implements IAgent {
       prompt: z.string().nonempty("O prompt não pode ser vazio")
     })
 
-    const llmKey = agentDomain.getLlmKey()
-    if (llmKey === undefined) {
-      throw new NotFoundError("Nenhuma chave de API encontrada!")
-    }
-
-    const llmKeyValue = this.cryptographyService.decrypt(llmKey.getKey())
+    const llmKey = await this.llmKeyService.getKey(agentDomain.getId())
 
     // get file and path
     const resp = await fetch(this.pathToMemory);
@@ -50,7 +46,7 @@ export class AgentImpl implements IAgent {
     // get file and path
 
     const res = await schema.safeParseAsync({
-      llmKey: llmKeyValue,
+      llmKey: llmKey.key,
       prompt: agentDomain.getPrompt()
     })
     if(!res.success) {
@@ -58,7 +54,7 @@ export class AgentImpl implements IAgent {
     }
     // Validation end
 
-    const agent = new Agent(llmKeyValue, agentDomain.getPrompt(), filePath)
+    const agent = new Agent(llmKey.key, agentDomain.getPrompt(), filePath)
 
     const { response } = await agent.ask(question, chatHistory)
 

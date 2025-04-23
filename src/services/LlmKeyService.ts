@@ -9,6 +9,7 @@ import type { PaginationDTO } from "../utils/dtos/PaginationDTO.js";
 import { PaginationValidator } from "../validators/PaginationValidator.js";
 import type { RequestGetLlmKeyDTO } from "../utils/dtos/llmKeys/RequestGetLlmKeyDTO.js";
 import type { ICryptography } from "../interfaces/ICryptography.js";
+import { ConflictError } from "../errors/ConflictError.js";
 
 @injectable()
 export class LlmKeyService {
@@ -19,24 +20,21 @@ export class LlmKeyService {
   ) {}
 
   // Services
-  // Create Service
+  // Create Service (OK!)
   async create(dto: RequestCreateLlmKeyDTO) {
     await LlmKeyValidator.validateRequestCreateLlmKeyDTO(dto)
     const llmKey = LlmKeyMapper.requestCreateDtoToEntity(dto)
     
-    // Valida se agente existe
     const agent = await this.agentRepository.findUnique({ by: { id: llmKey.getAgentId() } })
     if (agent === null) {
       throw new NotFoundError("Agente não encontrado!")
     }
 
-    // Valida se o agente já tem uma chave cadastrada
     const foundLlmKey = await this.llmKeyRepository.findUnique({ by: { agentId: llmKey.getAgentId() } })
     if (foundLlmKey !== null) {
-      throw new NotFoundError("O Agente já tem uma chave cadastrada!")
+      throw new ConflictError("O Agente já tem uma chave cadastrada!")
     }
 
-    // Encripta a chave
     const encryptedKey = this.cryptographyService.encrypt(llmKey.getKey())
     llmKey.setKey(encryptedKey)
 
@@ -60,22 +58,19 @@ export class LlmKeyService {
   }
 
   // Get Key Service
-  async getKey(dto: RequestGetLlmKeyDTO) {
-    const { agentId } = await LlmKeyValidator.validateGetLlmKeyDTO(dto)
+  async getKey(agentId: string) {
+    await LlmKeyValidator.validateGetLlmKeyDTO({ agentId })
 
-    // verificar se agente existe
     const agent = await this.agentRepository.findUnique({ by: { id: agentId } })
     if (agent === null) {
       throw new NotFoundError("Agente não encontrado!");
     }
 
-    // buscar chave por id
     const llmKey = await this.llmKeyRepository.findUnique({ by: { agentId } })
     if (llmKey === null) {
       throw new NotFoundError("Nenhuma chave de LLM encontrada para este agente!");
     }
 
-    // responder com a chave e id
     const decryptedKey = this.cryptographyService.decrypt(llmKey.getKey())
 
     return {
