@@ -68,7 +68,7 @@ export class Agent {
     
     const splitDocs = await splitter.splitDocuments(docs)
     
-    const embeddings = new OpenAIEmbeddings({ openAIApiKey: this.llmApiKey })
+    const embeddings = new OpenAIEmbeddings({ openAIApiKey: this.llmApiKey, verbose: true })
     
     // Trocar
     const vectorStore = await MemoryVectorStore.fromDocuments(splitDocs, embeddings)
