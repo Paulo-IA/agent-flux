@@ -85,15 +85,11 @@ export class Agent {
       
       const prompt = ChatPromptTemplate.fromMessages([
         ["developer", `
-          Responda a pergunta abaixo baseado no contexto:
+          <Contexto>
+            ${this.prompt}
           
-          Você sempre irá receber algo do tipo:
-          "Resposta adequada: .....",
-          sua missão é utilizar o que vem após "Resposta adequada: " para
-          produzir uma resposta com maior contexto.
-
-          Contexto: {context}
-          ${this.prompt}
+            {context} 
+          </Contexto>
         `],
         new MessagesPlaceholder("chat_history"),
         ["human", "Pergunta: {input}"]
