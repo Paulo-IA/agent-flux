@@ -18,7 +18,8 @@ export class AgentImpl implements IAgent {
   ) {}
 
   // private pathToMemory: string = import.meta.dirname.split('domain')[0] + "public/iris_memory.csv"
-  private pathToMemory: string = "https://pub-56edb005846c42279165d18761db2da6.r2.dev/iris_memory.csv"
+  private pathToMemory: string = "https://pub-56edb005846c42279165d18761db2da6.r2.dev/faq.csv"
+  // private pathToMemory: string = "https://pub-56edb005846c42279165d18761db2da6.r2.dev/iris_memory.csv"
 
   async ask(agentDomain: AgentDomain, questionInfos: QuestionInfos): Promise<string> {
     const { question, chatHistory } = questionInfos
