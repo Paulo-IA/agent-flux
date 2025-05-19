@@ -5,7 +5,12 @@ import { ErrorHandler } from "../middlewares/ErrorHandler.js"
 import fastifyCookie from "@fastify/cookie"
 import { env } from "../env.js"
 
+import cors from '@fastify/cors'
+
 const app = Fastify()
+await app.register(cors, {
+  origin: '*'
+})
 
 ErrorHandler(app)
 
