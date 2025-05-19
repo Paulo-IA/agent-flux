@@ -9,7 +9,8 @@ import cors from '@fastify/cors'
 
 const app = Fastify()
 await app.register(cors, {
-  origin: '*'
+  origin: '*',
+  methods: ['POST', 'PUT', 'GET']
 })
 
 ErrorHandler(app)
