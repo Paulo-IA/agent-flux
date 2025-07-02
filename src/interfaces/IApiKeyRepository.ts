@@ -3,5 +3,6 @@ import type { FindUniqueApiKeyQuery } from "../types/apiKey/FindUniqueApiKeyQuer
 
 export interface IApiKeyRepository {
   create(apiKey: ApiKey): Promise<void>
+  delete(apiKeyId: string): Promise<void>
   findMany(by: FindUniqueApiKeyQuery): Promise<ApiKey[]>
 }

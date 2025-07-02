@@ -9,18 +9,19 @@ import type { LangchainChatHistory } from "./types/LangchainChatHistory.js";
 import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { CSVLoader } from "@langchain/community/document_loaders/fs/csv";
 import type { ChatHistory } from "../../types/ChatHistory.js";
+import type { Runnable } from "@langchain/core/runnables";
 
 export class Agent {
   private llmApiKey: string
   private prompt: string
   private memoryPath: string
 
+  private chain: Runnable | null = null;
+
   constructor(llmApiKey: string, prompt: string, memoryPath: string) {
     this.llmApiKey = llmApiKey
     this.prompt = prompt
     this.memoryPath = memoryPath
-  
-    this.getChain()
   }
 
   async ask(question: string, requestChatHistory: ChatHistory) {
@@ -41,6 +42,11 @@ export class Agent {
   }
 
   private async getChain() {
+    if (this.chain) {
+      console.log("Reutilizando a chain existente...");
+      return this.chain;
+    }
+
     const vectorStore = await this.createVectorStore()
     const chain = await this.createChain(vectorStore)
 
