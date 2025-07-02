@@ -91,7 +91,9 @@ export class AgentService {
       throw new NotFoundError("Agente não encontrado!")
     }
 
+    console.log("==========={ HISTORICO PRE PERGUNTA }===========")
     console.log(chatHistory)
+    console.log("===========")
 
     const agentResponse = await this.agent.ask(agent, { question, chatHistory })
 
@@ -111,6 +113,9 @@ export class AgentService {
     }
 
     console.log(chatHistory)
+    console.log("==========={ HISTORICO POS PERGUNTA }===========")
+    console.log(chatHistory)
+    console.log("===========")
 
     // retornar resposta
     return response
