@@ -80,7 +80,8 @@ export class Agent {
       const model = new ChatOpenAI({
         openAIApiKey: this.llmApiKey,
         temperature: 0.7,
-        model: "gpt-4.1"
+        model: "gpt-4.1",
+        maxRetries: 5
       })
       
       const prompt = ChatPromptTemplate.fromMessages([
