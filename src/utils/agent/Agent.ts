@@ -11,7 +11,7 @@ import { CSVLoader } from "@langchain/community/document_loaders/fs/csv";
 import type { ChatHistory } from "../../types/ChatHistory.js";
 import type { Runnable } from "@langchain/core/runnables";
 
-type SavedVector = {
+export type SavedVector = {
   content: string;
   embedding: number[];
   metadata: Record<string, any>;

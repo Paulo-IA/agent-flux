@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import type { IAgent } from "../interfaces/IAgent.js";
 import type { QuestionInfos } from "../types/QuestionInfos.js";
-import { Agent } from "../utils/agent/Agent.js";
+import { Agent, type SavedVector } from "../utils/agent/Agent.js";
 import { Agent as AgentDomain } from "../domain/Agent.js"
 import { z } from "zod";
 import { ValidationError } from "../errors/ValidationError.js";
@@ -39,7 +39,7 @@ export class AgentImpl implements IAgent {
       throw new Error(`Erro HTTP: ${resp.status}`);
     }
 
-    const savedVectors = await resp.json()
+    const savedVectors = await resp.json() as SavedVector[]
 
     // const __dirname = import.meta.dirname.split('domain')[0]
     // const filename = `${new Date()}-${agentDomain.getId()}-memory.csv`
@@ -61,9 +61,6 @@ export class AgentImpl implements IAgent {
     const agent = new Agent(llmKey.key, agentDomain.getPrompt())
 
     const { response } = await agent.ask(question, chatHistory, savedVectors)
-
-    await fs.unlink(filePath)
-    console.log("Removido")
 
     return response
   }
