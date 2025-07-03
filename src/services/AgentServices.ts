@@ -92,6 +92,10 @@ export class AgentService {
       throw new NotFoundError("Agente não encontrado!")
     }
 
+    console.log(`[${new Date().toISOString()}] 📥 [LOG] Histórico recebido do cliente:`);
+    console.log(JSON.stringify(chatHistory, null, 2));
+    console.log('---');
+
     const historyForAgent: ChatHistory = [
       ...chatHistory,
       {
@@ -99,6 +103,10 @@ export class AgentService {
         content: question
       }
     ];
+
+    console.log(`[${new Date().toISOString()}] 🧠 [LOG] Contexto preparado e enviado ao agente:`);
+    console.log(JSON.stringify(historyForAgent, null, 2));
+    console.log('---');
     
     const agentResponse = await this.agent.ask(agent, {
       question,
@@ -117,6 +125,10 @@ export class AgentService {
       response: agentResponse,
       chatHistory: finalChatHistory
     };
+
+    console.log(`[${new Date().toISOString()}] 📤 [LOG] Histórico final e completo retornado na resposta:`);
+    console.log(JSON.stringify(finalChatHistory, null, 2));
+    console.log('---');
     
     return response;
   }
