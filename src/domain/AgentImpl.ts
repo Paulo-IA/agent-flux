@@ -18,7 +18,8 @@ export class AgentImpl implements IAgent {
   ) {}
 
   // private pathToMemory: string = import.meta.dirname.split('domain')[0] + "public/iris_memory.csv"
-  private pathToMemory: string = "https://pub-56edb005846c42279165d18761db2da6.r2.dev/faq.csv"
+  // private pathToMemory: string = "https://pub-56edb005846c42279165d18761db2da6.r2.dev/faq.csv"
+  private pathToMemory: string = "https://pub-56edb005846c42279165d18761db2da6.r2.dev/vectors-bia.json"
   // private pathToMemory: string = "https://pub-56edb005846c42279165d18761db2da6.r2.dev/iris_memory.csv"
 
   async ask(agentDomain: AgentDomain, questionInfos: QuestionInfos): Promise<string> {
@@ -38,12 +39,14 @@ export class AgentImpl implements IAgent {
       throw new Error(`Erro HTTP: ${resp.status}`);
     }
 
-    const __dirname = import.meta.dirname.split('domain')[0]
-    const filename = `${new Date()}-${agentDomain.getId()}-memory.csv`
-    const buffer = await resp.arrayBuffer();
-    const filePath = path.join(__dirname, "downloads", filename);
-    await fs.mkdir(path.dirname(filePath), { recursive: true });
-    await fs.writeFile(filePath, Buffer.from(buffer));
+    const savedVectors = await resp.json()
+
+    // const __dirname = import.meta.dirname.split('domain')[0]
+    // const filename = `${new Date()}-${agentDomain.getId()}-memory.csv`
+    // const buffer = await resp.arrayBuffer();
+    // const filePath = path.join(__dirname, "downloads", filename);
+    // await fs.mkdir(path.dirname(filePath), { recursive: true });
+    // await fs.writeFile(filePath, Buffer.from(buffer));
     // get file and path
 
     const res = await schema.safeParseAsync({
@@ -55,9 +58,9 @@ export class AgentImpl implements IAgent {
     }
     // Validation end
 
-    const agent = new Agent(llmKey.key, agentDomain.getPrompt(), filePath)
+    const agent = new Agent(llmKey.key, agentDomain.getPrompt())
 
-    const { response } = await agent.ask(question, chatHistory)
+    const { response } = await agent.ask(question, chatHistory, savedVectors)
 
     await fs.unlink(filePath)
     console.log("Removido")
