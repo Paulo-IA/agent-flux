@@ -16,6 +16,7 @@ import type { PaginationDTO } from "../utils/dtos/PaginationDTO.js";
 import { PaginationValidator } from "../validators/PaginationValidator.js";
 import type { RequestUpdateAgentDTO } from "../utils/dtos/agent/RequestUpdateAgentDTO.js";
 import { Agent } from "../domain/Agent.js";
+import type { ChatHistory } from "../types/ChatHistory.js";
 
 @injectable()
 export class AgentService {
@@ -81,8 +82,8 @@ export class AgentService {
 
   async ask(requestAgentAskDTO: RequestAgentAskDTO): Promise<ResponseAgentAskDTO> {
     const { question, chatHistory, agentId } = requestAgentAskDTO
-    // validar dados
-    if (question === "" || question === " ") {
+
+    if (!question || question.trim() === "") {
       throw new ValidationError("Dados inválidos!")
     }
 
@@ -91,33 +92,32 @@ export class AgentService {
       throw new NotFoundError("Agente não encontrado!")
     }
 
-    console.log("==========={ HISTORICO PRE PERGUNTA }===========")
-    console.log(chatHistory)
-    console.log("===========")
+    const historyForAgent: ChatHistory = [
+      ...chatHistory,
+      {
+        role: "user",
+        content: question
+      }
+    ];
+    
+    const agentResponse = await this.agent.ask(agent, {
+      question,
+      chatHistory: historyForAgent
+    });
 
-    const agentResponse = await this.agent.ask(agent, { question, chatHistory })
-
-    chatHistory.push({
-      role: "user",
-      content: question
-    })
-
-    chatHistory.push({
-      role: "assistant",
-      content: agentResponse
-    })
+    const finalChatHistory: ChatHistory = [
+      ...historyForAgent,
+      {
+        role: "assistant",
+        content: agentResponse
+      }
+    ];
 
     const response: ResponseAgentAskDTO = {
       response: agentResponse,
-      chatHistory
-    }
-
-    console.log(chatHistory)
-    console.log("==========={ HISTORICO POS PERGUNTA }===========")
-    console.log(chatHistory)
-    console.log("===========")
-
-    // retornar resposta
-    return response
+      chatHistory: finalChatHistory
+    };
+    
+    return response;
   }
 }

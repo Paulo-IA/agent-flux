@@ -86,25 +86,6 @@ export class Agent {
     return vectorStore;
   }
 
-  // private async createVectorStore() {
-  //   const loader = new CSVLoader(this.memoryPath)
-  //   const docs = await loader.load()
-    
-  //   const splitter = new RecursiveCharacterTextSplitter({
-  //     chunkSize: 300,
-  //     chunkOverlap: 30
-  //   })
-    
-  //   const splitDocs = await splitter.splitDocuments(docs)
-    
-  //   const embeddings = new OpenAIEmbeddings({ openAIApiKey: this.llmApiKey, verbose: true })
-    
-  //   // Trocar
-  //   const vectorStore = await MemoryVectorStore.fromDocuments(splitDocs, embeddings)
-  
-  //   return vectorStore
-  // }
-
   private async createChain(vectorStore: MemoryVectorStore) {    
     const model = new ChatOpenAI({
       openAIApiKey: this.llmApiKey,
