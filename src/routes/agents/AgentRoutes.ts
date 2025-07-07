@@ -7,7 +7,8 @@ import { isAuth } from "../../middlewares/IsAuth.js";
 export async function AgentRoutes(app: FastifyInstance) {
   const agentController: AgentController = appContianer.resolve<AgentController>("AgentController")
  
-  app.post("/", { preHandler: isAuth}, agentController.create.bind(agentController))
+  // app.post("/", { preHandler: isAuth}, agentController.create.bind(agentController))
+  app.post("/", agentController.create.bind(agentController))
   app.post("/ask", { preHandler: ApiKeyAuth }, agentController.ask.bind(agentController))
 
   app.get("/", { preHandler: isAuth }, agentController.findMany.bind(agentController))
