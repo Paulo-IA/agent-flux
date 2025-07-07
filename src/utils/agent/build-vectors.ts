@@ -7,8 +7,8 @@ import "dotenv/config";
 // import { r2 } from "../../lib/cloudflare.js";
 // import { env } from "../../env.js";
 
-const SOURCE_CSV_URL = "https://pub-56edb005846c42279165d18761db2da6.r2.dev/faq.csv";
-const OUTPUT_FILENAME = "vectors-bia.json";
+const SOURCE_CSV_URL = "https://pub-56edb005846c42279165d18761db2da6.r2.dev/iris_memory.csv";
+const OUTPUT_FILENAME = "vectors-iris.json";
 const R2_BUCKET_NAME = "agent-flux-dev";
 
 export const r2 = new S3Client({
